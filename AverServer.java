@@ -17,6 +17,7 @@ public class AverServer {
         int port = a.length > 0 ? Integer.parseInt(a[0]) : System.getenv("PORT") != null ? Integer.parseInt(System.getenv("PORT")) : 8080;
         Files.createDirectories(CAPES); Files.createDirectories(MODELS);
         HttpServer s = HttpServer.create(new InetSocketAddress(port), 0);
+        s.createContext("/", ex -> send(ex, 200, ex.getRequestMethod().equals("HEAD") ? "" : "ok"));
         s.createContext("/ping", ex -> {
             try {
                 String[] b = new String(ex.getRequestBody().readNBytes(1024), StandardCharsets.UTF_8).split("\n", -1);
